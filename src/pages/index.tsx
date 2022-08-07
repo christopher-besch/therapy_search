@@ -1,13 +1,16 @@
-import * as React from "react"
-import type { HeadFC } from "gatsby"
+import * as React from "react";
+import type { HeadFC } from "gatsby";
+import Layout from "src/components/layout";
 
 const IndexPage = () => {
     return (
-        <h1>Hello World!</h1>
+        <Layout>
+            <h1>Hello World!</h1>
+        </Layout>
     );
-}
+};
 
-export default IndexPage
+export default IndexPage;
 
 export const Head: HeadFC = () => <title>Therapy Search</title>
 

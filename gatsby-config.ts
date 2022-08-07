@@ -1,12 +1,22 @@
 import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
-    siteMetadata: {
-        title: `Therapy Search`,
-        siteUrl: `https://therapy_search.chris-besch.com`
-    },
     graphqlTypegen: true,
-    plugins: ["gatsby-plugin-sass"]
+    plugins: [
+        {
+            resolve: "gatsby-plugin-root-import",
+        },
+        {
+            resolve: "gatsby-plugin-sass",
+        },
+        {
+            resolve: "gatsby-source-filesystem",
+            options: {
+                name: "static",
+                path: `${__dirname}/static`,
+            }
+        },
+    ],
 };
 
 export default config;

@@ -1,0 +1,3 @@
+interface Therapist {
+    name: string;
+};

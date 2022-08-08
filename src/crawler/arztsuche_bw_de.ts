@@ -58,25 +58,74 @@ function get_all_time_slots(name_row_data: Element): TimeSlot[] {
     return [];
 }
 
-export function get_data(url: string, onload: (therapists: Therapist[]) => void): void {
-    load_virtual_document(url, (vdocument) => {
-        let therapists: Therapist[] = [];
-        const raw_therapists = vdocument.getElementsByClassName("resultrow");
-        for (const raw_therapist of Array.from(raw_therapists)) {
-            const name_row = raw_therapist.getElementsByClassName("name")[1]!;
-            const name_row_data = name_row.children[0]!;
-            const raw_name = name_row_data.children[0]!.innerHTML;
-            const name = raw_name.replaceAll("<br>", "");
+function get_name(name_row_data: Element): string {
+    const raw_name = name_row_data.children[0]!.innerHTML;
+    return raw_name.replaceAll("<br>", "");
+}
 
-            const time_slots = get_all_time_slots(name_row_data);
+function get_url(raw_therapist: Element): string {
+    const auswahl_row = raw_therapist.getElementsByClassName("auswahl")[1]!;
+    const checkbox = auswahl_row.children[0] as HTMLInputElement;
+    const id = checkbox.value;
+    return `https://www.arztsuche-bw.de/index.php?suchen=3&checkbox_cmd=pdf&checkbox_content=${id}`;
+}
 
-            therapists.push({
-                name: name,
-                info_url: "",
-                time_slots: time_slots,
-            });
-        }
+function get_therapist_amount(vdocument: Document): number {
+    const hits = vdocument.getElementsByClassName("anzahl_treffer")[0]!;
+    const raw_amount = hits.children[0]!.innerHTML;
+    const matches = raw_amount.match(/\s(\d+) Treffern$/)!;
+    return Number(matches[1]);
+}
+
+// add new therapists to therapist parameter
+function get_therapists(
+    vdocument: Document,
+    therapists: Therapist[],
+    target_length: number,
+    onload: (therapists: Therapist[]) => void,
+): void {
+    const raw_therapists = vdocument.getElementsByClassName("resultrow");
+    for (const raw_therapist of Array.from(raw_therapists)) {
+        const name_row = raw_therapist.getElementsByClassName("name")[1]!;
+        const name_row_data = name_row.children[0]!;
+
+        therapists.push({
+            name: get_name(name_row_data),
+            url: get_url(raw_therapist),
+            time_slots: get_all_time_slots(name_row_data),
+        });
+    }
+    // loading finished?
+    if (therapists.length == target_length)
         onload(therapists);
+}
+
+// get all therapists that aren't on first page
+function get_other_therapists(
+    url_handler: URL,
+    therapists: Therapist[],
+    target_length: number,
+    onload: (therapists: Therapist[]) => void,
+): void {
+    for (let offset = 20; offset < target_length; offset += 20) {
+        console.log(`crawling at offset ${offset}`);
+        url_handler.searchParams.set("offset", offset.toString());
+        load_virtual_document(url_handler, (vdocument) => {
+            get_therapists(vdocument, therapists, target_length, onload);
+        });
+    }
+}
+
+export function get_data(url: string, onload: (therapists: Therapist[]) => void): void {
+    let url_handler = new URL(url);
+    url_handler.searchParams.set("offset", "0");
+
+    load_virtual_document(url_handler, (vdocument) => {
+        let target_length = get_therapist_amount(vdocument);
+
+        let therapists: Therapist[] = [];
+        get_other_therapists(url_handler, therapists, target_length, onload);
+        get_therapists(vdocument, therapists, target_length, onload);
     });
 }
 

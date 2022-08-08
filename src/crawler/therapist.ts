@@ -2,7 +2,7 @@ import { TimeSlot } from "./date";
 
 export interface Therapist {
     name: string;
-    info_url: string;
+    url: string;
     time_slots: TimeSlot[];
 };
 

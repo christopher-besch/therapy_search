@@ -1,7 +1,6 @@
 // create hidden iframe and return document of that page -> virtual document
-export function load_virtual_document(url: string, onload: (vdocument: Document) => void): void {
-    // const cors_anywhere_url = `https://cors-anywhere.herokuapp.com/${url}`;
-    const cors_anywhere_url = `http://localhost:8080/${url}`;
+export function load_virtual_document(url_handler: URL, onload: (vdocument: Document) => void): void {
+    const cors_anywhere_url = `http://192.168.188.40:8080/${url_handler.toString()}`;
 
     let iframe = document.createElement("iframe");
     iframe.style.display = "none";

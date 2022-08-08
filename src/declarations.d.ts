@@ -7,3 +7,5 @@ declare module '*.module.scss' {
     export = styles;
 };
 
+declare module "react-native-calendar-timetable";
+

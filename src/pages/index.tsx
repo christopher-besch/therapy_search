@@ -10,7 +10,7 @@ const IndexPage = () => {
         let url = url_input_ref.current?.value!;
         let params = new URLSearchParams();
         params.set("url", url);
-        navigate(`/timetable?${params.toString}`);
+        navigate(`/timetable?${params.toString()}`);
 
         e.preventDefault();
     }

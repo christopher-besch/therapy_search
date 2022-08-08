@@ -1,5 +1,5 @@
 // create hidden iframe and return document of that page -> virtual document
-function load_virtual_document(url: string, onload: (vdocument: Document) => void): void {
+export function load_virtual_document(url: string, onload: (vdocument: Document) => void): void {
     const cors_anywhere_url = `https://cors-anywhere.herokuapp.com/${url}`;
 
     let iframe = document.createElement("iframe");
@@ -16,8 +16,3 @@ function load_virtual_document(url: string, onload: (vdocument: Document) => voi
         });
     });
 }
-
-export function get_data(url: string): void {
-    load_virtual_document(url, (vdocument) => { console.log(vdocument); });
-}
-

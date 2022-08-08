@@ -19,7 +19,7 @@ time, mark, audio, video {
     border: 0;
     font-size: 100%;
     font: inherit;
-    color: $text;
+    // color: $text;
     vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -29,7 +29,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
-    background-color: $back_pri;
+    // background-color: $back_pri;
     font-family: liberation_sans, Arial;
 }
 /* ol, ul, li { */

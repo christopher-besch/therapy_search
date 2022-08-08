@@ -37,7 +37,7 @@ function get_day(raw_day: string): Day {
 export function get_date(raw_day: string): Date {
     const day = get_day(raw_day);
     let date = new Date();
-    // searching for a Monday -> just get any Monday somewhat close to today
+    // searching for a Monday -> get any Monday in the current week
     date.setDate(date.getDate() + (day - date.getDay()));
     return date;
 }

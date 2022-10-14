@@ -6,6 +6,7 @@ import { Calendar, momentLocalizer, Event as CalEvent } from "react-big-calendar
 import moment from "moment";
 import "moment-timezone";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { test_cors_anywhere } from "src/crawler/crawler";
 
 const TimetablePage = (props: PageProps) => {
     let [events, set_events] = React.useState<CalEvent[]>([]);
@@ -13,13 +14,10 @@ const TimetablePage = (props: PageProps) => {
     const params = new URLSearchParams(props.location.search);
     const url = params.get("url")!;
     React.useEffect(() => {
+        test_cors_anywhere();
         get_data(url, (therapists) => {
             let new_events: CalEvent[] = [];
             for (let therapist of therapists) {
-                // only qualified therapists may be listed
-                if (therapist.name == "Dipl.-Psych. Gisela Garn")
-                    continue;
-
                 for (let time_slot of therapist.time_slots) {
                     new_events.push({
                         start: time_slot.start,

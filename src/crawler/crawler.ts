@@ -1,6 +1,9 @@
+// TODO: don't hardcode
+const cors_anywhere = "http://localhost:8080";
+
 // create hidden iframe and return document of that page -> virtual document
 export function load_virtual_document(url_handler: URL, onload: (vdocument: Document) => void): void {
-    const cors_anywhere_url = `http://192.168.188.40:8080/${url_handler.toString()}`;
+    const cors_anywhere_url = `${cors_anywhere}/${url_handler.toString()}`;
 
     let iframe = document.createElement("iframe");
     iframe.style.display = "none";
@@ -16,3 +19,11 @@ export function load_virtual_document(url_handler: URL, onload: (vdocument: Docu
         });
     });
 }
+
+export function test_cors_anywhere(): void {
+    const cors_anywhere_url = `${cors_anywhere}/http://chris-besch.com`;
+    fetch(cors_anywhere_url).catch(_ => {
+        throw `cors_anywhere at '${cors_anywhere}' is broken`;
+    });
+}
+
